@@ -17,4 +17,7 @@
 // sure that if we *do* accidentally break the configuration,
 // the failure isn't silent.
 
-throw new Error('This module must be shimmed by a specific renderer.');
+// 原代码
+// throw new Error('This module must be shimmed by a specific renderer.');
+// 修改后代码
+export * from './forks/ReactFiberHostConfig.dom';

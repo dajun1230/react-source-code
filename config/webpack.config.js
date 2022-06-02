@@ -49,8 +49,10 @@ const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 
 const emitErrorsAsWarnings = process.env.ESLINT_NO_DEV_ERRORS === 'true';
-const disableESLintPlugin = process.env.DISABLE_ESLINT_PLUGIN === 'true';
-
+// 原代码
+// const disableESLintPlugin = process.env.DISABLE_ESLINT_PLUGIN === 'true';
+// 修改后代码
+const disableESLintPlugin = true;
 const imageInlineSizeLimit = parseInt(
   process.env.IMAGE_INLINE_SIZE_LIMIT || '10000'
 );
@@ -310,15 +312,29 @@ module.exports = function (webpackEnv) {
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
       alias: {
-        // Support React Native Web
-        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-        'react-native': 'react-native-web',
-        // Allows for better profiling with ReactDevTools
-        ...(isEnvProductionProfile && {
-          'react-dom$': 'react-dom/profiling',
-          'scheduler/tracing': 'scheduler/tracing-profiling',
-        }),
-        ...(modules.webpackAliases || {}),
+        // 原代码
+        // // Support React Native Web
+        // // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+        // 'react-native': 'react-native-web',
+        // // Allows for better profiling with ReactDevTools
+        // ...(isEnvProductionProfile && {
+        //   'react-dom$': 'react-dom/profiling',
+        //   'scheduler/tracing': 'scheduler/tracing-profiling',
+        // }),
+        // ...(modules.webpackAliases || {}),
+        // 修改后代码
+        react: path.join(paths.appSrc, 'react-main/packages/react'),
+        'react-dom': path.join(paths.appSrc, 'react-main/packages/react-dom'),
+        shared: path.join(paths.appSrc, 'react-main/packages/shared'),
+        'react-reconciler': path.join(
+          paths.appSrc,
+          'react-main/packages/react-reconciler'
+        ),
+        'legacy-events': path.join(
+          paths.appSrc,
+          'react-main/packages/legacy-events'
+        ),
+        scheduler: path.join(paths.appSrc, 'react-main/packages/scheduler'),
       },
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
